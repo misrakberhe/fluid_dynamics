@@ -6,7 +6,7 @@
   "n_items": 8,
   "g1_mean_score_threshold": 1.0,
   "g1_top1_min_count": 6,
-  "scoring_position": "answer_pos (after greedy prefix following t*; usually whitespace on Qwen)",
+  "scoring_position": "answer_pos (after greedy prefix following t*)",
   "note": "Primary score/top1 use answer_pos. score_W_minus_C_at_tstar / top1_at_tstar kept for comparison. GPT-2 scores at t* directly (digit is top-1 there).",
   "mean_score_forced_C": -5.497874140739441,
   "frac_top1_impulse_forced_C": 1.0,
@@ -17,5 +17,12 @@
     "frac_top1_impulse_forced_C": 1.0,
     "source": "/fluid_dynamics/forced_W_vs_C_outputs/summary.csv"
   },
-  "phase": 2
+  "phase": 3,
+  "g2_causal_pass": true,
+  "mean_delta_Wwin_Cswap": -2.099154233932495,
+  "mean_delta_rand_control": -0.023545026779174805,
+  "g2_cswap_threshold": -1.0,
+  "gpt2_reference_Wwin_Cswap_delta": -4.94,
+  "causal_layer_band": "L8-23",
+  "n_layers": 32
 }
