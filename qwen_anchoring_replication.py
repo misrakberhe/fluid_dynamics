@@ -231,32 +231,57 @@ def smoke_test(model, item: Item | None = None) -> dict:
     return result
 
 
+def score_at_pos(logits, pos: int, W_id: int, C_id: int) -> float:
+    v = logits[0, pos]
+    return float(v[W_id] - v[C_id])
+
+
 def evaluate_behavior(model, item: Item, variant: str) -> dict:
     prompt = build_W_prompt(item) if variant == "W" else build_C_prompt(item)
     str_toks = model.to_str_tokens(prompt)
     t_star = find_t_star(str_toks)
     impulse_pos = find_impulse_pos(str_toks)
-    W_id = model.to_single_token(item.W_str)
-    C_id = model.to_single_token(item.C_str)
-    logits = model(model.to_tokens(prompt))
-    score = score_at_tstar(model, logits, t_star, W_id, C_id)
-    top1 = model.to_string([int(logits[0, t_star].argmax())])
     impulse_tok = str_toks[impulse_pos]
     bank_label = item.W_str if variant == "W" else item.C_str
+    W_id = model.to_single_token(item.W_str)
+    C_id = model.to_single_token(item.C_str)
+
+    logits0 = model(model.to_tokens(prompt))
+    top1_at_tstar = model.to_string([int(logits0[0, t_star].argmax())])
+    score_at_tstar = score_at_pos(logits0, t_star, W_id, C_id)
+
+    # Qwen: t* usually predicts whitespace; answer digit is at the next step.
+    if top1_at_tstar in (item.W_str, item.C_str):
+        logits_answer = logits0
+        answer_pos = t_star
+        answer_prefix = ""
+    else:
+        answer_prefix = top1_at_tstar
+        logits_answer = model(model.to_tokens(prompt + answer_prefix))
+        answer_pos = len(model.to_str_tokens(prompt + answer_prefix)) - 1
+
+    score = score_at_pos(logits_answer, answer_pos, W_id, C_id)
+    top1 = model.to_string([int(logits_answer[0, answer_pos].argmax())])
+
     return {
         "item": item.name,
         "variant": variant,
         "prompt": prompt,
         "t_star": t_star,
+        "answer_pos": answer_pos,
+        "answer_prefix": answer_prefix,
         "impulse_pos": impulse_pos,
         "impulse_token": impulse_tok,
+        "score_W_minus_C_at_tstar": score_at_tstar,
         "score_W_minus_C": score,
         "abs_score": abs(score),
+        "top1_at_tstar": top1_at_tstar,
         "top1": top1,
         "top1_is_bank_W": top1 == item.W_str,
         "top1_is_bank_C": top1 == item.C_str,
         "top1_is_bank_impulse": top1 == bank_label,
         "top1_matches_impulse": top1 == impulse_tok,
+        "top1_at_tstar_matches_impulse": top1_at_tstar == impulse_tok,
     }
 
 
@@ -284,10 +309,12 @@ def summarize_behavior(behavior: pd.DataFrame) -> pd.DataFrame:
             "n_items": len(sub),
             "mean_score_W_minus_C": sub["score_W_minus_C"].mean(),
             "sem_score_W_minus_C": sub["score_W_minus_C"].sem(),
+            "mean_score_W_minus_C_at_tstar": sub["score_W_minus_C_at_tstar"].mean(),
             "mean_abs_score": sub["abs_score"].mean(),
             "frac_top1_impulse": sub["top1_matches_impulse"].mean(),
             "frac_top1_bank_W": sub["top1_is_bank_W"].mean(),
             "frac_top1_bank_C": sub["top1_is_bank_C"].mean(),
+            "frac_top1_whitespace_at_tstar": (sub["top1_at_tstar"].str.strip() == "").mean(),
         })
     summary = pd.DataFrame(summary_rows)
 
@@ -329,9 +356,10 @@ def evaluate_g1(behavior: pd.DataFrame) -> dict:
         "n_items": n_items,
         "g1_mean_score_threshold": 1.0,
         "g1_top1_min_count": threshold,
+        "scoring_position": "answer_pos (after greedy prefix following t*; usually whitespace on Qwen)",
         "note": (
-            "Qwen may predict whitespace at t* before the answer digit; "
-            "see behavior.csv top1 vs top1_is_bank_W."
+            "Primary score/top1 use answer_pos. score_W_minus_C_at_tstar / top1_at_tstar kept for comparison. "
+            "GPT-2 scores at t* directly (digit is top-1 there)."
         ),
     }
 
@@ -375,8 +403,8 @@ def plot_gpt2_vs_qwen(behavior: pd.DataFrame):
     axes[0].axhline(0, color="gray", ls="--", lw=0.8)
     axes[0].set_xticks(x)
     axes[0].set_xticklabels(models)
-    axes[0].set_ylabel("mean score @ t* (logit W − logit C)")
-    axes[0].set_title("Behavior: GPT-2 vs Qwen")
+    axes[0].set_ylabel("mean score @ answer pos (logit W − logit C)")
+    axes[0].set_title("Behavior: GPT-2 @ t* vs Qwen @ answer pos")
     axes[0].legend(fontsize=8)
 
     axes[1].bar(x - width / 2, w_frac, width, label="forced W", color="#e74c3c", alpha=0.85)

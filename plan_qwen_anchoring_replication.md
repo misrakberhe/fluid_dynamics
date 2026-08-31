@@ -145,11 +145,13 @@ Per item:
 | forced_W | `{a} + {b} ={W}. Wait, let me recompute. {a} + {b} =` |
 | forced_C (stretch) | `{a} + {b} ={C}. Wait, let me recompute. {a} + {b} =` |
 
-Metrics @ `t*`:
+Metrics @ `t*` (GPT-2) / **`answer_pos`** (Qwen — digit after greedy whitespace prefix following `=`):
 
 - score = logit(W) − logit(C)
 - top-1 token
 - frac top-1 = impulse token
+
+`behavior.csv` also records `score_W_minus_C_at_tstar` and `top1_at_tstar` for comparison.
 
 Compare to GPT-2 reference (`E4_outputs`, `forced_W_vs_C_outputs`).
 
