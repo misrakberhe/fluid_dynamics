@@ -1,9 +1,8 @@
 # Qwen anchoring replication (Phase 1+)
-# On GPU pods, install torch with CUDA first if not already present:
-#   pip install torch --index-url https://download.pytorch.org/whl/cu124
+# RunPod image runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404 ships torch 2.8 + CUDA 12.8.
+# Do NOT pip-install torch on that image — setup_gpu_pod.sh uses --system-site-packages.
 transformer-lens>=3
 transformers>=5.4
 tuned-lens
-torchvision
 pandas
 matplotlib

@@ -71,7 +71,7 @@ References:
 ### GPU pod setup (RunPod — recommended)
 
 1. **Deploy pod:** [runpod.io](https://www.runpod.io) → GPU Cloud → RTX 4090 or A5000 (24GB+)
-   - Template: **RunPod PyTorch 2.x** (or any CUDA 12.x + Python 3.11 image)
+   - Template / image: **`runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404`** (PyTorch 2.8 + CUDA 12.8)
    - Disk: ≥30GB (model cache ~8GB for 4B)
 2. **SSH in** (RunPod → Connect → SSH over exposed TCP)
 3. **Get code** (pick one):
