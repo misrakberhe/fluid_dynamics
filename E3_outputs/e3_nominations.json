@@ -1,0 +1,24 @@
+{
+  "landing_band_layers": [
+    5,
+    11
+  ],
+  "top_source_regions": [
+    "W_window",
+    "W",
+    "revision",
+    "pre_W"
+  ],
+  "emergence_depths": [
+    5,
+    6,
+    6,
+    6,
+    6,
+    1,
+    1,
+    0
+  ],
+  "mean_final_score": 2.707782030105591,
+  "key_region_frac_late": 0.9052933390609208
+}

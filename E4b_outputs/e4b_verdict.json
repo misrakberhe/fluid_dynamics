@@ -1,0 +1,8 @@
+{
+  "tstar_resid_swap_L5-11_delta": -5.3888702392578125,
+  "W_window_resid_swap_L5-11_delta": -4.937479257583618,
+  "tstar_late_band_L9-11_delta": -5.3888702392578125,
+  "tstar_early_band_L0-4_delta": -0.010147333145141602,
+  "decision_mostly_at_tstar_locally": true,
+  "source_W_still_necessary": true
+}

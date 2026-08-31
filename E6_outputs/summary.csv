@@ -1,0 +1,2 @@
+mean_score_baseline,mean_score_corrupt,mean_delta_corrupt,sem_delta_corrupt,frac_top1_orig_W_baseline,frac_top1_orig_W_corrupt,frac_top1_visible_W2_corrupt,mean_score_visible_corrupt
+2.707782506942749,0.4221220016479492,-2.2856605052948,0.21755963086287272,1.0,0.625,0.0,0.05644798278808594

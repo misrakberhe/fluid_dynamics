@@ -1,0 +1,6 @@
+{
+  "residue_carried": false,
+  "score_collapses_on_corrupt": true,
+  "mean_delta_corrupt": -2.2856605052948,
+  "recomputes_visible_pair": false
+}

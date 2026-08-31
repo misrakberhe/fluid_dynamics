@@ -1,0 +1,6 @@
+{
+  "resid_swap_causally_necessary": true,
+  "resid_swap_causally_sufficient": true,
+  "write_ablation_weak_vs_resid_swap": true,
+  "mid_layers_L5_L8_dominant_in_sweep": true
+}

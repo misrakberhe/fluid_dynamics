@@ -76,3 +76,20 @@ Stress-test the model against one specific remembered real insight: pulse → sh
 ## Standing caveat
 
 Group 2 is generative/interpretive and useful for thinking, but has not been reframed into falsifiable claims. That reframing is long-horizon. Near-term execution lives in Group 1 / Test 1.
+
+---
+
+## E0–E8 spine (complete, 2026-08-31)
+
+Forced-error arithmetic on GPT-2 small: E0–E8 done. **One-pager:** [`E0-E8_spine_narrative.md`](E0-E8_spine_narrative.md)
+
+**Headline:** E2–E7 map a causal pipeline for **typed-in wrong-answer persistence** (write-wave at W → mid-depth W_window state → late fixation at `t*`). E8: bank-W sticking requires W **in the prompt** — not general self-generated commitment on this bank. Revision cues never flip behavior (E1) and don't write toward C (E7).
+
+**Plan doc** (`momentum-experiment-plan.md`) header is stale; empirical spine is in session summaries + narrative above.
+
+**Forward options:** [`REDESIGN_OPTIONS.md`](REDESIGN_OPTIONS.md)
+
+**Priority A write-up draft:** [`WRITEUP_forced_answer_anchoring.md`](WRITEUP_forced_answer_anchoring.md)
+
+**MATS application boosters:** [`MATS_application_boosters.md`](MATS_application_boosters.md)
+

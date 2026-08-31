@@ -1,0 +1,9 @@
+{
+  "competing_push_toward_C": false,
+  "mean_sum_post_revision_cue": 17.72771003143862,
+  "frac_items_revision_toward_C": 0.375,
+  "mean_unit_direction_revision": -0.00078975853185035,
+  "mean_cue_minus_filler_revision": 8.447678913827986,
+  "revision_weaker_than_W_window": false,
+  "interpretation": "cue_not_recruited_no_competing_overwrite"
+}

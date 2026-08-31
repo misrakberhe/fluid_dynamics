@@ -1,0 +1,30 @@
+item,mode,prompt,t_star,score_bank_WC,p_C_pair,top1,top1_is_bank_W,top1_is_bank_C,top1_is_gen_first,gen_impulse_str,gen_first_token,gen_equals_bank_W,gen_equals_bank_C
+ops_12+15,forced_W,"12 + 15 = 25. Wait, let me recompute. 12 + 15 =",17,4.194223403930664,0.43123091594518964, 25,True,False,False, 1., 1,False,False
+ops_12+15,self_generated,"12 + 15 = 1. Wait, let me recompute. 12 + 15 =",17,1.618952751159668,0.4518644499371508, 1,False,False,True, 1., 1,False,False
+ops_12+15,forced_impulse_match,"12 + 15 = 1. Wait, let me recompute. 12 + 15 =",17,1.618952751159668,0.4518644499371508, 1,False,False,True, 1., 1,False,False
+ops_8+7,forced_W,"8 + 7 = 14. Wait, let me recompute. 8 + 7 =",17,2.4444217681884766,0.4630380422515819, 14,True,False,False, 8., 8,False,False
+ops_8+7,self_generated,"8 + 7 = 8. Wait, let me recompute. 8 + 7 =",17,-0.3941364288330078,0.509572812972118, 8,False,False,True, 8., 8,False,False
+ops_8+7,forced_impulse_match,"8 + 7 = 8. Wait, let me recompute. 8 + 7 =",17,-0.3941364288330078,0.509572812972118, 8,False,False,True, 8., 8,False,False
+ops_11+12,forced_W,"11 + 12 = 22. Wait, let me recompute. 11 + 12 =",17,1.8689594268798828,0.4723693930725828, 22,True,False,False, 1., 1,False,False
+ops_11+12,self_generated,"11 + 12 = 1. Wait, let me recompute. 11 + 12 =",17,0.9221696853637695,0.4740627057187554, 1,False,False,True, 1., 1,False,False
+ops_11+12,forced_impulse_match,"11 + 12 = 1. Wait, let me recompute. 11 + 12 =",17,0.9221696853637695,0.4740627057187554, 1,False,False,True, 1., 1,False,False
+ops_9+6,forced_W,"9 + 6 = 14. Wait, let me recompute. 9 + 6 =",17,2.768474578857422,0.4578710250426666, 14,True,False,False, 1., 1,False,False
+ops_9+6,self_generated,"9 + 6 = 1. Wait, let me recompute. 9 + 6 =",17,-0.22145748138427734,0.5060306508677629, 1,False,False,True, 1., 1,False,False
+ops_9+6,forced_impulse_match,"9 + 6 = 1. Wait, let me recompute. 9 + 6 =",17,-0.22145748138427734,0.5060306508677629, 1,False,False,True, 1., 1,False,False
+ops_13+14,forced_W,"13 + 14 = 26. Wait, let me recompute. 13 + 14 =",17,1.2628097534179688,0.4807046033181941, 26,True,False,False, 1., 1,False,False
+ops_13+14,self_generated,"13 + 14 = 1. Wait, let me recompute. 13 + 14 =",17,0.42051219940185547,0.48701605055830754, 1,False,False,True, 1., 1,False,False
+ops_13+14,forced_impulse_match,"13 + 14 = 1. Wait, let me recompute. 13 + 14 =",17,0.42051219940185547,0.48701605055830754, 1,False,False,True, 1., 1,False,False
+ops_4+5,forced_W,"4 + 5 = 8. Wait, let me recompute. 4 + 5 =",17,2.1139097213745117,0.467387572721566, 8,True,False,False, 4., 4,False,False
+ops_4+5,self_generated,"4 + 5 = 4. Wait, let me recompute. 4 + 5 =",17,1.1673555374145508,0.474234659114374, 4,False,False,True, 4., 4,False,False
+ops_4+5,forced_impulse_match,"4 + 5 = 4. Wait, let me recompute. 4 + 5 =",17,1.1673555374145508,0.474234659114374, 4,False,False,True, 4., 4,False,False
+ops_16+10,forced_W,"16 + 10 = 24. Wait, let me recompute. 16 + 10 =",17,4.489049911499023,0.4259439790227653, 24,True,False,False, 0., 0,False,False
+ops_16+10,self_generated,"16 + 10 = 0. Wait, let me recompute. 16 + 10 =",17,0.5335302352905273,0.4852099198045272, 0,False,False,True, 0., 0,False,False
+ops_16+10,forced_impulse_match,"16 + 10 = 0. Wait, let me recompute. 16 + 10 =",17,0.5335302352905273,0.4852099198045272, 0,False,False,True, 0., 0,False,False
+ops_3+8,forced_W,"3 + 8 = 10. Wait, let me recompute. 3 + 8 =",17,2.520411491394043,0.45925083380398873, 10,True,False,False," 4
+", 4,False,False
+ops_3+8,self_generated,"3 + 8 = 4
+ Wait, let me recompute. 3 + 8 =",17,0.5418510437011719,0.48774371302601627, 4,False,False,True," 4
+", 4,False,False
+ops_3+8,forced_impulse_match,"3 + 8 = 4
+ Wait, let me recompute. 3 + 8 =",17,0.5418510437011719,0.48774371302601627, 4,False,False,True," 4
+", 4,False,False

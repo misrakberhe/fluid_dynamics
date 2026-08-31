@@ -1,0 +1,12 @@
+{
+  "persistence_only_when_W_typed": true,
+  "typing_same_as_generating_impulse": true,
+  "self_gen_sticks_to_own_impulse": true,
+  "mean_score_forced_W": 2.707782506942749,
+  "mean_score_self_generated": 0.5735971927642822,
+  "mean_score_forced_impulse_match": 0.5735971927642822,
+  "mean_delta_self_minus_forced": -2.134185314178467,
+  "frac_top1_bank_W_forced": 1.0,
+  "frac_top1_bank_W_self": 0.0,
+  "interpretation": "bank_W_persistence_is_input_copying"
+}

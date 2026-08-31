@@ -1,0 +1,2 @@
+mean_score_forced_W,mean_score_self_generated,mean_score_forced_match,mean_delta_self_minus_forced,sem_delta_self_minus_forced,mean_delta_match_minus_self,frac_top1_bank_W_forced,frac_top1_bank_W_self,frac_top1_gen_first_self,frac_gen_first_equals_bank_W,frac_gen_first_equals_bank_C
+2.707782506942749,0.5735971927642822,0.5735971927642822,-2.134185314178467,0.40650575064205113,0.0,1.0,0.0,1.0,0.0,0.0

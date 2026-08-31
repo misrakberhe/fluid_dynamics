@@ -1,0 +1,35 @@
+{
+  "mean_emergence_tuned": 3.875,
+  "mean_emergence_logit": 4.125,
+  "mean_causal_onset_layer": 6.5,
+  "mean_causal_peak_layer": 10.25,
+  "readout_before_causal_peak": true,
+  "early_readout_low_causal": {
+    "L3": {
+      "tuned": 0.1894667148590088,
+      "w_sensitivity": 0.04276265762746334,
+      "patch_delta": -0.009399175643920898
+    },
+    "L5": {
+      "tuned": 0.1461409330368042,
+      "w_sensitivity": 0.07253586826846004,
+      "patch_delta": -0.4734005928039551
+    },
+    "L7": {
+      "tuned": 1.355394721031189,
+      "w_sensitivity": 0.08710067626088858,
+      "patch_delta": -2.72760272026062
+    },
+    "L9": {
+      "tuned": 2.4853217601776123,
+      "w_sensitivity": 0.09671356528997421,
+      "patch_delta": -5.283171653747559
+    },
+    "L11": {
+      "tuned": 3.079444169998169,
+      "w_sensitivity": 0.09562357794493437,
+      "patch_delta": -5.3888702392578125
+    }
+  },
+  "jlens_note": "Full Anthropic J-lens (github.com/anthropics/jacobian-lens) deferred: no pretrained gpt2 lens; fitting requires transformers>=5.5 and ~96 backward passes/prompt. w\u0302 sensitivity is a cheap directional proxy."
+}
