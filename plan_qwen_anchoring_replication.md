@@ -1,7 +1,7 @@
 # Plan — Qwen replication of forced answer anchoring
 
 **Date:** 2026-08-31  
-**Status:** Phase 1 complete (CPU smoke test on Qwen3.5-0.8B; use 4B on GPU for Phase 2+)  
+**Status:** Phase 4 complete (Qwen3.5-4B GPU runs + packaging)  
 **Goal:** Validate GPT-2 anchoring results on a modern model for external validity (Neel MATS 12.0, write-up).  
 **Related:** [`E0-E8_spine_narrative.md`](E0-E8_spine_narrative.md), [`E4_content_patching.py`](E4_content_patching.py), [`MATS_application_boosters.md`](MATS_application_boosters.md), [`WRITEUP_forced_answer_anchoring.md`](WRITEUP_forced_answer_anchoring.md)
 
@@ -136,7 +136,7 @@ If <5 items pass audit, add 2–4 new `a+b=` pairs with validated single-token W
 ### Phase 2 — Behavioral replication (~2–3 h)
 
 - [x] `behavior` / `phase2` command in `qwen_anchoring_replication.py`
-- [ ] Run on GPU pod: `source .venv/bin/activate && python qwen_anchoring_replication.py behavior`
+- [x] Run on GPU pod: `source .venv/bin/activate && python qwen_anchoring_replication.py behavior`
 
 Per item:
 
@@ -168,7 +168,7 @@ Deliverables:
 ### Phase 3 — Causal replication (~3–5 h)
 
 - [x] `causal` / `phase3` command — W_window C-swap + rand control @ answer_pos
-- [ ] Run on GPU: `python qwen_anchoring_replication.py causal`
+- [x] Run on GPU: `python qwen_anchoring_replication.py causal`
 
 Per item:
 
@@ -192,10 +192,14 @@ Deliverables:
 
 ### Phase 4 — Packaging (~2–4 h)
 
-- [ ] `qwen_anchoring_replication_session_summary.md` — results + comparison to GPT-2
-- [ ] Update `E0-E8_spine_narrative.md` — one paragraph on Qwen external validity
-- [ ] Update `MATS_application_boosters.md` — second-model checkbox; paste-ready sentence
-- [ ] Optional: add Qwen panel to application figure (GPT-2 | Qwen side-by-side E4 Δ)
+- [x] `qwen_anchoring_replication_session_summary.md` — results + comparison to GPT-2
+- [x] Update `E0-E8_spine_narrative.md` — one paragraph on Qwen external validity
+- [x] Update `MATS_application_boosters.md` — second-model checkbox; paste-ready sentence
+- [x] Optional: add Qwen panel to application figure (GPT-2 | Qwen side-by-side E4 Δ) — `replication_causal_gpt2_vs_qwen.png`
+
+**MATS line (actual outcome — G1 fail, G2 pass):**
+
+> Qwen3.5-4B does not behaviorally anchor forced wrong answers (revision succeeds), but mid-depth impulse-window C-swap still shifts answer-digit preference (Δ ≈ −2.1 vs ≈ 0 control) — causal localization without GPT-2-style sticking.
 
 **MATS line (if gates pass):**
 

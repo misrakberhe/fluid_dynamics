@@ -54,17 +54,17 @@ You don't need all four. **One** polished addition + tight framing is often enou
 
 ---
 
-### 3. Second model (external validity)
+### 3. Second model (external validity) — **done (Qwen3.5-4B)**
 
-**What:** Same protocol on one additional model — **planned: Qwen3.5-4B** (see [`plan_qwen_anchoring_replication.md`](plan_qwen_anchoring_replication.md)).
+**What:** Same protocol on one additional model — **completed** on Qwen3.5-4B (see [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md)).
 
-**Minimum:** E1-style behavior (score + top-1 at t*) + E4-style one intervention (W_window C-swap Δ) on a subset of items.
+**Result:** G1 behavior **fail** (forced-W revises to C; 0% top-1 = W). G2 causal **pass** (W_window C-swap Δ ≈ −2.1 vs rand control ≈ 0; GPT-2 ref −4.9). Behavior–causality **dissociation**.
 
-**Why:** "GPT-2 only" is the main skepticism; one replication answers it partially.
+**Why it matters:** Answers "GPT-2 only" partially — causal localization survives on a capable model even when behavioral sticking breaks.
 
-**Effort:** Medium (~9–16 h; token audit + behavior + causal MVP)
+**MATS line (paste-ready):**
 
-**MATS line:** "Anchoring causal structure replicates / differs on Qwen3.5-4B."
+> Qwen3.5-4B does not behaviorally anchor forced wrong answers (revision succeeds), but mid-depth impulse-window C-swap still shifts answer-digit preference (Δ ≈ −2.1 vs ≈ 0 control) — causal localization without GPT-2-style sticking.
 
 ---
 
@@ -146,7 +146,7 @@ Pick **one primary track** (+ optional stretch):
 2. **Application paragraph** using framing above
 3. **MATS summer proposal** (one track, 3 milestones)
 4. **Forced C** OR **public README** (whichever is faster for you)
-5. **Second model** (if time remains)
+5. ~~**Second model**~~ — **done** (Qwen3.5-4B; see `qwen_anchoring_replication_session_summary.md`)
 
 ---
 
@@ -166,7 +166,9 @@ Pick **one primary track** (+ optional stretch):
 
 - [`WRITEUP_forced_answer_anchoring.md`](WRITEUP_forced_answer_anchoring.md) — narrative draft
 - [`E0-E8_spine_narrative.md`](E0-E8_spine_narrative.md) — one-page summary
+- [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md) — Qwen external validity
 - `E4_outputs/` — key causal numbers
+- `qwen_replication_outputs/` — Qwen behavior + causal figures
 - `E4_content_patching.py` — reproducibility
 - **New:** polished figure (when done)
 - **New:** public README or post (when done)

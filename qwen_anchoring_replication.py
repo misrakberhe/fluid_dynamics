@@ -655,6 +655,77 @@ def plot_gpt2_vs_qwen(behavior: pd.DataFrame):
     print(f"Wrote {OUT_DIR / 'behavior_gpt2_vs_qwen.png'}")
 
 
+def plot_gpt2_vs_qwen_causal(causal: pd.DataFrame, layer_label: str):
+    """Side-by-side GPT-2 vs Qwen W_window C-swap Δ (Phase 4 application figure)."""
+    cswap_name = f"necessity_resid_Wwin_{layer_label}_Cswap"
+    qwen_row = causal[causal["intervention"] == cswap_name]
+    if qwen_row.empty:
+        print(f"Warning: no {cswap_name} in causal.csv; skipping replication figure")
+        return
+
+    qwen_delta = float(qwen_row["delta"].mean())
+    qwen_sem = float(qwen_row["delta"].sem())
+    gpt2_delta = -4.94  # forced_W_vs_C / E4 reference
+
+    models = ["GPT-2", "Qwen3.5"]
+    means = [gpt2_delta, qwen_delta]
+    sems = [0.0, qwen_sem]
+
+    fig, ax = plt.subplots(figsize=(5, 4))
+    x = np.arange(len(models))
+    colors = ["#3498db", "#e74c3c"]
+    ax.bar(x, means, yerr=sems, capsize=4, color=colors, alpha=0.85)
+    ax.axhline(0, color="gray", ls="--", lw=0.8)
+    ax.set_xticks(x)
+    ax.set_xticklabels(models)
+    ax.set_ylabel("mean Δ score (W_window C-swap)")
+    ax.set_title("Causal: GPT-2 L5–11 vs Qwen L8–23")
+    fig.tight_layout()
+    out = OUT_DIR / "replication_causal_gpt2_vs_qwen.png"
+    fig.savefig(out, dpi=150)
+    plt.close(fig)
+    print(f"Wrote {out}")
+
+
+def run_phase4_packaging():
+    """Phase 4: regenerate figures from saved outputs (no GPU / model load)."""
+    behavior_path = OUT_DIR / "behavior.csv"
+    causal_path = OUT_DIR / "causal.csv"
+    verdict_path = OUT_DIR / "verdict.json"
+
+    if not behavior_path.exists():
+        raise FileNotFoundError(f"Missing {behavior_path}; run phase2 first")
+
+    behavior = pd.read_csv(behavior_path)
+    plot_gpt2_vs_qwen(behavior)
+
+    layer_label = "L8-23"
+    if verdict_path.exists():
+        with open(verdict_path) as f:
+            verdict = json.load(f)
+        layer_label = verdict.get("causal_layer_band", layer_label)
+        g1 = "PASS" if verdict.get("g1_behavior_pass") else "FAIL"
+        g2 = "PASS" if verdict.get("g2_causal_pass") else "FAIL"
+        print(f"G1 behavior: {g1} | G2 causal: {g2}")
+
+    if causal_path.exists():
+        causal = pd.read_csv(causal_path)
+        plot_gpt2_vs_qwen_causal(causal, layer_label)
+    else:
+        print(f"Warning: {causal_path} missing; skip causal comparison figure")
+
+    print("Phase 4 packaging artifacts:")
+    for name in [
+        "qwen_anchoring_replication_session_summary.md",
+        "behavior_gpt2_vs_qwen.png",
+        "causal_interventions.png",
+        "replication_causal_gpt2_vs_qwen.png",
+    ]:
+        path = Path(__file__).resolve().parent / name if name.endswith(".md") else OUT_DIR / name
+        status = "ok" if path.exists() else "missing"
+        print(f"  [{status}] {path.name}")
+
+
 def run_behavior_phase(model, include_forced_c: bool = True) -> dict:
     behavior = run_behavior(model, include_forced_c=include_forced_c)
     summarize_behavior(behavior)
@@ -682,7 +753,18 @@ def main():
     parser = argparse.ArgumentParser(description="Qwen anchoring replication")
     parser.add_argument(
         "command",
-        choices=["token-audit", "smoke-test", "behavior", "causal", "all", "phase1", "phase2", "phase3"],
+        choices=[
+            "token-audit",
+            "smoke-test",
+            "behavior",
+            "causal",
+            "all",
+            "phase1",
+            "phase2",
+            "phase3",
+            "phase4",
+            "package",
+        ],
         help="Experiment subcommand",
     )
     parser.add_argument("--model", default=None, help="HuggingFace model id")
@@ -707,6 +789,11 @@ def main():
     args = parser.parse_args()
 
     OUT_DIR.mkdir(exist_ok=True)
+
+    if args.command in ("phase4", "package"):
+        run_phase4_packaging()
+        return
+
     model = load_model(args.model)
 
     if args.command in ("token-audit", "all", "phase1"):

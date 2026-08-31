@@ -271,7 +271,7 @@ Extensions that **strengthen** the anchoring paper without changing the core cla
 | Forced **C** spine | Wrong vs right asymmetry | Low — **done** (`forced_W_vs_C_*`) |
 | Self-aligned persistence | Gen scored on own axis | Low — **done** (`self_aligned_persistence_*`) |
 | More items / cues | Robustness | Low |
-| Second model (e.g. Qwen3.5-4B) | External validity | Medium — **planned:** [`plan_qwen_anchoring_replication.md`](plan_qwen_anchoring_replication.md) |
+| Second model (e.g. Qwen3.5-4B) | External validity | Medium — **done:** [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md) |
 | User-message framing | "The answer is 25" vs bare `= 25` | Low |
 | E9 α-sweep on patch | Nonlinearity of anchor strength | Medium |
 | Compare ICL-planted wrong answer | vs user-typed W | Medium |

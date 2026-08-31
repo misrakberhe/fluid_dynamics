@@ -108,6 +108,13 @@ causal gen-locus swap Δ ≈ −10. **Generic slot binding** for self-generated 
 - “The model resists revision” — nothing competes; the cue doesn’t write toward C.
 - Generalization to self-generated wrong answers on this bank (model emits different tokens).
 
+**External validity (Qwen3.5-4B, post-spine):** On an 8-item single-digit bank, forced-W revision
+**succeeds** behaviorally (0% top-1 = W; mean score −3.4 @ answer_pos) unlike GPT-2 (+2.7, 100% W).
+Yet W_window C-swap at L8–23 still shifts preference (Δ ≈ −2.1; random-position control ≈ 0) — roughly
+half GPT-2's magnitude (−4.9). Mid-depth answer-locus state remains a causal lever even when greedy
+output already favors the correct answer; **behavior–causality dissociation**, not full replication.
+Details: [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md).
+
 ---
 
 ## One-sentence summary
@@ -123,6 +130,7 @@ its own.
 - **Write-up:** frame E2–E7 as forced-error mech interp; E8 as scope boundary.
 - **Done (post-spine):** forced W vs C asymmetry — near-symmetric; see `forced_W_vs_C_session_summary.md`.
 - **Done (post-spine):** self-aligned persistence — gen sticks strongly on aligned axis; see `self_aligned_persistence_session_summary.md`.
+- **Done (post-spine):** Qwen3.5-4B replication — behavioral revision succeeds; causal C-swap still localizes; see `qwen_anchoring_replication_session_summary.md`.
 - **Redesign:** prompt bank where greedy gen hits bank W; re-run E8.
 - **Phase 4 (optional, label forced-only):** E9 formation threshold, E10 re-excitation, E11 QK resonance.
 - **Deferred:** J-lens; E12 transfer function.
