@@ -71,4 +71,4 @@ python qwen_anchoring_replication.py all
 echo ""
 echo "=== Setup complete ==="
 echo "Next: python qwen_anchoring_replication.py smoke-test"
-echo "Phase 2: python qwen_anchoring_replication.py behavior   # (once implemented)"
+echo "Phase 2: python qwen_anchoring_replication.py behavior"

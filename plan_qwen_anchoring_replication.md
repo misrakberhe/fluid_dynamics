@@ -135,7 +135,8 @@ If <5 items pass audit, add 2–4 new `a+b=` pairs with validated single-token W
 
 ### Phase 2 — Behavioral replication (~2–3 h)
 
-E1-style on Qwen (no interp beyond scoring).
+- [x] `behavior` / `phase2` command in `qwen_anchoring_replication.py`
+- [ ] Run on GPU pod: `source .venv/bin/activate && python qwen_anchoring_replication.py behavior`
 
 Per item:
 
