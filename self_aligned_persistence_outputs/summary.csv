@@ -1,0 +1,2 @@
+mean_aligned_forced_gen,mean_aligned_self_gen,mean_aligned_forced_bank_W,mean_bank_WC_forced_bank_W,mean_delta_self_minus_forced_gen,frac_top1_gen_forced_gen,frac_top1_gen_self_gen,frac_top1_gen_forced_bank_W,mean_causal_delta_gen_Cswap,mean_abs_causal_delta_gen,reference_causal_delta_bank_W_Cswap
+7.458614945411682,7.458614945411682,-1.3829493522644043,2.707782030105591,0.0,1.0,1.0,0.0,-10.111113429069519,10.111113429069519,-4.937479

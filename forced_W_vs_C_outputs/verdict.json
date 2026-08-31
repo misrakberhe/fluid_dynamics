@@ -1,0 +1,14 @@
+{
+  "forced_W_persists": true,
+  "forced_C_persists": true,
+  "behavior_near_symmetric": true,
+  "causal_near_symmetric": true,
+  "mean_score_forced_W": 2.707782030105591,
+  "mean_score_forced_C": -2.6810882091522217,
+  "asymmetry_ratio_abs_W_over_C": 1.0099563381996335,
+  "frac_top1_impulse_forced_W": 1.0,
+  "frac_top1_impulse_forced_C": 1.0,
+  "mean_causal_delta_W_prompt_Cswap": -4.937479257583618,
+  "mean_causal_delta_C_prompt_Wswap": 4.92417049407959,
+  "interpretation": "near_symmetric_wrong_right_anchoring"
+}

@@ -1,0 +1,16 @@
+{
+  "item": "ops_4+5",
+  "model": "Qwen/Qwen3.5-0.8B",
+  "n_layers": 24,
+  "device": "cpu",
+  "prompt": "4 + 5 =8. Wait, let me recompute. 4 + 5 =",
+  "n_tokens": 20,
+  "impulse_pos": 5,
+  "impulse_token": "8",
+  "t_star": 19,
+  "score_W_minus_C": -3.710150718688965,
+  "top1_at_tstar": " ",
+  "logits_finite": true,
+  "cache_hook_ok": true,
+  "indices_match_audit": true
+}

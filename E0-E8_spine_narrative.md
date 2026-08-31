@@ -70,6 +70,24 @@ E8 compared **typed bank W** vs **greedy self-generated** answers before the cue
 forward**. They do **not** license a general claim that the model independently commits to the same
 wrong arithmetic answer.
 
+### Forced W vs forced C (post-spine)
+
+| Condition | Mean W−C @ `t*` | Top-1 = impulse |
+|---|---|---|
+| Forced W in prompt | +2.71 | 100% (bank W) |
+| Forced C in prompt | −2.68 | 100% (bank C) |
+
+Asymmetry ratio |W|/|C| ≈ 1.01; mirrored causal swaps Δ ≈ ±5. **Wrong and correct anchoring are
+symmetric** — persistence is generic answer-slot binding, not wrong-answer bias. See
+`forced_W_vs_C_session_summary.md`.
+
+### Self-aligned persistence (post-spine)
+
+E8 scored self-gen on bank W−C (+0.57) vs forced W (+2.71) — misleading when gen ≠ bank W.
+Re-scoring on each item's axis (logit(gen) − logit(bank C)): self-gen **+7.46**, 100% top-1 = gen;
+causal gen-locus swap Δ ≈ −10. **Generic slot binding** for self-generated impulses. See
+`self_aligned_persistence_session_summary.md`.
+
 ---
 
 ## What we can claim
@@ -81,6 +99,8 @@ wrong arithmetic answer.
 - Sticking is **modulated** by visible context but not explained by pure recomputation or cue-driven
   overwrite toward C.
 - Revision cues **fail behaviorally** and are **not** recruited internally toward C.
+- Forced **correct** (C) anchoring is **symmetric** to forced wrong (W) on this bank — not a wrong-answer bias.
+- Self-generated impulses **persist strongly** on each item's aligned axis (+7.5, 100% top-1 = gen); E8's low bank W−C score was ruler mismatch.
 
 **Not supported without redesign:**
 
@@ -101,8 +121,11 @@ its own.
 ## Open forks
 
 - **Write-up:** frame E2–E7 as forced-error mech interp; E8 as scope boundary.
+- **Done (post-spine):** forced W vs C asymmetry — near-symmetric; see `forced_W_vs_C_session_summary.md`.
+- **Done (post-spine):** self-aligned persistence — gen sticks strongly on aligned axis; see `self_aligned_persistence_session_summary.md`.
 - **Redesign:** prompt bank where greedy gen hits bank W; re-run E8.
 - **Phase 4 (optional, label forced-only):** E9 formation threshold, E10 re-excitation, E11 QK resonance.
 - **Deferred:** J-lens; E12 transfer function.
 
-**Artifacts:** `E{N}_session_summary.md`, `E{N}_*.py`, `E{N}_outputs/` for N = 0–8 (+ E4b).
+**Artifacts:** `E{N}_session_summary.md`, `E{N}_*.py`, `E{N}_outputs/` for N = 0–8 (+ E4b);
+post-spine extensions use descriptive names (e.g. `forced_W_vs_C_*`).

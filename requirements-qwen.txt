@@ -1,0 +1,9 @@
+# Qwen anchoring replication (Phase 1+)
+# On GPU pods, install torch with CUDA first if not already present:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu124
+transformer-lens>=3
+transformers>=5.4
+tuned-lens
+torchvision
+pandas
+matplotlib

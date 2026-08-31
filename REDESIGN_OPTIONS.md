@@ -65,6 +65,8 @@ moves `t*`. Legitimizes “commitment” for model-chosen impulses, not only typ
 
 ## 3. Self-aligned persistence (E8b)
 
+**Status:** **Done** (2026-08-31). Artifacts: `self_aligned_persistence.py`, `self_aligned_persistence_session_summary.md`.
+
 **Problem:** Scoring self-gen on bank W−C asks the wrong question when gen ≠ bank W.
 
 **Protocol:**
@@ -73,11 +75,12 @@ moves `t*`. Legitimizes “commitment” for model-chosen impulses, not only typ
 - Compare strength to forced-W on **each item’s own axis**
 - Optional: E4-style residual patch at **gen** position (not W_window for bank W)
 
-**Question:** Is persistence **generic** (“stick to whatever occupied the answer slot”) with
-similar causal strength for gen vs forced?
+**Result:** On aligned axis (gen vs bank C), self-gen mean **+7.46**, 100% top-1 = gen — much
+stronger than E8's +0.57 on bank W−C (ruler mismatch). Typing = generating (Δ = 0). Causal
+gen-locus C-swap Δ ≈ **−10.1**. Generic slot binding holds for self-gen.
 
 **Nontrivial if:** gen persistence is as strong as forced-W on matched rulers and causally
-localized at the impulse locus.
+localized at the impulse locus. *(Yes — localized and strong on aligned axis.)*
 
 **Effort:** Low (reuse E8 + E4 machinery).
 
@@ -103,13 +106,19 @@ settings where the cue **occasionally** redirects behavior.
 
 ## 5. Force C, or wrong vs right asymmetry
 
+**Status:** **Done** (2026-08-31). Artifacts: `forced_W_vs_C_asymmetry.py`, `forced_W_vs_C_session_summary.md`.
+
 **Untested symmetry:** spine mostly used **forced wrong** (bank W).
 
 **Variants:**
 - **Forced C:** `12 + 15 = 27. Wait…` — does correct answer persist equally?
 - **Asymmetry:** is wrong-W anchoring stronger than correct-C anchoring?
 
+**Result:** Near-symmetric. Forced W mean score +2.71, forced C −2.68; both 100% top-1 = impulse;
+mirrored causal swaps Δ ≈ ±5. Wrong-answer persistence is **not** special — generic answer-slot binding.
+
 **Nontrivial if:** wrong and right anchoring differ — practically and psychologically interesting.
+*(Not observed on this bank.)*
 
 **Effort:** Low (reuse full spine with C-prompt as primary; E4 already has `build_C_prompt`).
 

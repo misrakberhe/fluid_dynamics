@@ -226,9 +226,9 @@ the anchored token. Persistence of **this specific W** requires W in the input (
 ### Do not claim without new experiments
 
 - [ ] Generic commitment / momentum across tasks or models.
-- [ ] Model self-commits to wrong arithmetic on this bank.
+- [ ] Whether self-generated impulses lack persistence — **ruled out** on aligned axis (`self_aligned_persistence_session_summary.md`).
 - [ ] Revision "resistance" — prefer "non-recruitment" or "anchoring."
-- [ ] Wrong > correct asymmetry (forced C spine not run).
+- [ ] Wrong > correct asymmetry — **ruled out** (forced W vs C near-symmetric; see `forced_W_vs_C_session_summary.md`).
 - [ ] Generality beyond 8 items / one cue family.
 
 ---
@@ -268,9 +268,10 @@ Extensions that **strengthen** the anchoring paper without changing the core cla
 
 | Extension | Adds | Effort |
 |---|---|---|
-| Forced **C** spine | Wrong vs right asymmetry | Low |
+| Forced **C** spine | Wrong vs right asymmetry | Low — **done** (`forced_W_vs_C_*`) |
+| Self-aligned persistence | Gen scored on own axis | Low — **done** (`self_aligned_persistence_*`) |
 | More items / cues | Robustness | Low |
-| Second model (e.g. Pythia-160M) | External validity | Medium |
+| Second model (e.g. Qwen3.5-4B) | External validity | Medium — **planned:** [`plan_qwen_anchoring_replication.md`](plan_qwen_anchoring_replication.md) |
 | User-message framing | "The answer is 25" vs bare `= 25` | Low |
 | E9 α-sweep on patch | Nonlinearity of anchor strength | Medium |
 | Compare ICL-planted wrong answer | vs user-typed W | Medium |
@@ -320,7 +321,7 @@ self-commitment on our task bank.
 2. **Draft §4** first — results are already frozen in session summaries.
 3. **One main figure:** schematic (§5) + E4 bar chart.
 4. **Abstract** — refine §Abstract after §4 draft.
-5. Optional: run **forced C** (Option 5 in REDESIGN_OPTIONS) for one new paragraph on asymmetry.
+5. ~~Optional: run **forced C** (Option 5 in REDESIGN_OPTIONS) for one new paragraph on asymmetry.~~ **Done** — symmetric; paragraph draft in `forced_W_vs_C_session_summary.md`.
 
 ---
 

@@ -1,0 +1,14 @@
+{
+  "self_gen_matches_forced_gen_on_aligned_axis": true,
+  "gen_persistence_at_least_as_strong_as_bank_W": true,
+  "gen_causally_localized": true,
+  "causal_flip_stronger_than_bank_W": true,
+  "mean_aligned_forced_gen": 7.458614945411682,
+  "mean_aligned_self_gen": 7.458614945411682,
+  "mean_bank_WC_forced_bank_W": 2.707782030105591,
+  "strength_gap_bank_W_minus_gen_aligned": -4.750832915306091,
+  "mean_causal_delta_gen_Cswap": -10.111113429069519,
+  "causal_ratio_vs_bank_W": 2.0478291510849,
+  "frac_top1_gen_self": 1.0,
+  "interpretation": "generic_slot_binding_on_aligned_axis"
+}

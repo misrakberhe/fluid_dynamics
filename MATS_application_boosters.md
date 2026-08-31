@@ -56,18 +56,15 @@ You don't need all four. **One** polished addition + tight framing is often enou
 
 ### 3. Second model (external validity)
 
-**What:** Same protocol on one additional model, e.g.:
-
-- Pythia-160M / 410M (TransformerLens-friendly)
-- Or smallest available instruction model if tooling allows
+**What:** Same protocol on one additional model — **planned: Qwen3.5-4B** (see [`plan_qwen_anchoring_replication.md`](plan_qwen_anchoring_replication.md)).
 
 **Minimum:** E1-style behavior (score + top-1 at t*) + E4-style one intervention (W_window C-swap Δ) on a subset of items.
 
 **Why:** "GPT-2 only" is the main skepticism; one replication answers it partially.
 
-**Effort:** Medium (setup, tokenization checks, 8 items × key conditions)
+**Effort:** Medium (~9–16 h; token audit + behavior + causal MVP)
 
-**MATS line:** "Anchoring causal structure replicates / differs on [model X]."
+**MATS line:** "Anchoring causal structure replicates / differs on Qwen3.5-4B."
 
 ---
 
@@ -181,7 +178,7 @@ Pick **one primary track** (+ optional stretch):
 - [ ] MATS word limits for past work vs proposal
 - [ ] Which mentor/lab angle (pure mech interp vs alignment-adjacent anchoring/sycophancy)
 - [ ] Track A vs B for summer proposal
-- [ ] Whether to run forced C before submitting
+- [ ] Whether to run forced C before submitting — **done** (`forced_W_vs_C_*`)
 
 ---
 

@@ -91,5 +91,6 @@ Forced-error arithmetic on GPT-2 small: E0–E8 done. **One-pager:** [`E0-E8_spi
 
 **Priority A write-up draft:** [`WRITEUP_forced_answer_anchoring.md`](WRITEUP_forced_answer_anchoring.md)
 
-**MATS application boosters:** [`MATS_application_boosters.md`](MATS_application_boosters.md)
+**MATS application boosters:** [`MATS_application_boosters.md`](MATS_application_boosters.md)  
+**Qwen replication plan:** [`plan_qwen_anchoring_replication.md`](plan_qwen_anchoring_replication.md)
 
