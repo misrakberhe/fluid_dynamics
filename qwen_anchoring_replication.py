@@ -236,6 +236,239 @@ def score_at_pos(logits, pos: int, W_id: int, C_id: int) -> float:
     return float(v[W_id] - v[C_id])
 
 
+def get_scoring_setup(model, item: Item, variant: str) -> dict:
+    """Base prompt tokens/cache + extended score_tokens at answer_pos."""
+    prompt = build_W_prompt(item) if variant == "W" else build_C_prompt(item)
+    str_toks = model.to_str_tokens(prompt)
+    t_star = find_t_star(str_toks)
+    impulse_pos = find_impulse_pos(str_toks)
+    regions = tag_regions(str_toks, impulse_pos, t_star)
+    tokens = model.to_tokens(prompt)
+
+    logits0 = model(tokens)
+    top1_at_tstar = model.to_string([int(logits0[0, t_star].argmax())])
+    if top1_at_tstar in (item.W_str, item.C_str):
+        score_prompt = prompt
+        score_tokens = tokens
+        answer_pos = t_star
+        answer_prefix = ""
+    else:
+        answer_prefix = top1_at_tstar
+        score_prompt = prompt + answer_prefix
+        score_tokens = model.to_tokens(score_prompt)
+        answer_pos = len(model.to_str_tokens(score_prompt)) - 1
+
+    return {
+        "prompt": prompt,
+        "score_prompt": score_prompt,
+        "tokens": tokens,
+        "score_tokens": score_tokens,
+        "str_toks": str_toks,
+        "t_star": t_star,
+        "answer_pos": answer_pos,
+        "answer_prefix": answer_prefix,
+        "impulse_pos": impulse_pos,
+        "regions": regions,
+    }
+
+
+def score_with_hooks(
+    model,
+    score_tokens: torch.Tensor,
+    answer_pos: int,
+    W_id: int,
+    C_id: int,
+    hooks: list | None = None,
+) -> float:
+    if hooks:
+        with model.hooks(hooks):
+            logits = model(score_tokens)
+    else:
+        logits = model(score_tokens)
+    return score_at_pos(logits, answer_pos, W_id, C_id)
+
+
+def landing_layers(n_layers: int, frac_start: float = 0.25, frac_end: float = 0.75) -> list[int]:
+    """Mid-depth band (~25–75% of layers), matching Phase 3 plan."""
+    start = max(0, int(n_layers * frac_start))
+    end = max(start + 1, int(n_layers * frac_end))
+    return list(range(start, end))
+
+
+def random_control_positions(str_toks: list[str], t_star: int, W_window: list[int]) -> list[int]:
+    """Distance-matched random positions (E4 protocol)."""
+    width = len(W_window)
+    center = t_star - 3
+    rand_pos = list(
+        range(max(1, center - width // 2), min(len(str_toks), center - width // 2 + width))
+    )
+    return [p for p in rand_pos if p != t_star][:width]
+
+
+def run_item_causal(
+    model,
+    item: Item,
+    layers: list[int],
+    layer_label: str,
+) -> list[dict]:
+    W_id = model.to_single_token(item.W_str)
+    C_id = model.to_single_token(item.C_str)
+
+    w = get_scoring_setup(model, item, "W")
+    c = get_scoring_setup(model, item, "C")
+
+    _, w_cache = model.run_with_cache(w["tokens"])
+    _, c_cache = model.run_with_cache(c["tokens"])
+
+    baseline = score_with_hooks(model, w["score_tokens"], w["answer_pos"], W_id, C_id)
+    W_window = w["regions"]["W_window"]
+    rand_pos = random_control_positions(w["str_toks"], w["t_star"], W_window)
+
+    rows = []
+
+    def record(intervention: str, patched: float):
+        delta = patched - baseline
+        frac = delta / baseline if abs(baseline) > 1e-6 else float("nan")
+        rows.append({
+            "item": item.name,
+            "intervention": intervention,
+            "layer_band": layer_label,
+            "layers": "|".join(map(str, layers)),
+            "baseline": baseline,
+            "patched": patched,
+            "delta": delta,
+            "frac_of_baseline": frac,
+            "answer_pos": w["answer_pos"],
+            "answer_prefix": w["answer_prefix"],
+            "W_window": "|".join(map(str, W_window)),
+            "rand_pos": "|".join(map(str, rand_pos)),
+        })
+
+    hooks = make_resid_patch_hooks(c_cache, layers, W_window)
+    record(f"necessity_resid_Wwin_{layer_label}_Cswap", score_with_hooks(
+        model, w["score_tokens"], w["answer_pos"], W_id, C_id, hooks
+    ))
+
+    hooks = make_resid_patch_hooks(c_cache, layers, rand_pos)
+    record(f"control_resid_randpos_{layer_label}_Cswap", score_with_hooks(
+        model, w["score_tokens"], w["answer_pos"], W_id, C_id, hooks
+    ))
+
+    return rows
+
+
+def summarize_causal(causal: pd.DataFrame) -> pd.DataFrame:
+    summary = (
+        causal.groupby("intervention")
+        .agg(
+            mean_baseline=("baseline", "mean"),
+            mean_patched=("patched", "mean"),
+            mean_delta=("delta", "mean"),
+            sem_delta=("delta", "sem"),
+            mean_frac=("frac_of_baseline", "mean"),
+            n=("delta", "count"),
+        )
+        .reset_index()
+        .sort_values("mean_delta")
+    )
+    summary.to_csv(OUT_DIR / "causal_summary.csv", index=False)
+    print(f"Wrote {OUT_DIR / 'causal_summary.csv'}")
+    print(summary.to_string(index=False))
+    return summary
+
+
+def plot_causal(causal: pd.DataFrame, layer_label: str):
+    summary = (
+        causal.groupby("intervention")
+        .agg(mean_delta=("delta", "mean"), sem_delta=("delta", "sem"))
+    )
+    order = [
+        f"necessity_resid_Wwin_{layer_label}_Cswap",
+        f"control_resid_randpos_{layer_label}_Cswap",
+    ]
+    labels = ["W_window C-swap", "rand-pos control"]
+    colors = ["#e74c3c", "#95a5a6"]
+
+    fig, ax = plt.subplots(figsize=(6, 4))
+    x = np.arange(len(order))
+    means = [summary.loc[i, "mean_delta"] if i in summary.index else 0 for i in order]
+    sems = [summary.loc[i, "sem_delta"] if i in summary.index else 0 for i in order]
+    ax.bar(x, means, yerr=sems, capsize=4, color=colors, alpha=0.85)
+    ax.axhline(0, color="gray", ls="--", lw=0.8)
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+    ax.set_ylabel("mean Δ score @ answer_pos")
+    ax.set_title(f"Phase 3 causal (Qwen, {layer_label})")
+    fig.tight_layout()
+    fig.savefig(OUT_DIR / "causal_interventions.png", dpi=150)
+    plt.close(fig)
+    print(f"Wrote {OUT_DIR / 'causal_interventions.png'}")
+
+
+def evaluate_g2(causal: pd.DataFrame, layer_label: str) -> dict:
+    cswap_name = f"necessity_resid_Wwin_{layer_label}_Cswap"
+    rand_name = f"control_resid_randpos_{layer_label}_Cswap"
+    cswap = causal[causal["intervention"] == cswap_name]["delta"]
+    rand = causal[causal["intervention"] == rand_name]["delta"]
+    mean_cswap = float(cswap.mean())
+    mean_rand = float(rand.mean())
+    g2_pass = mean_cswap < -1.0 and abs(mean_cswap) > abs(mean_rand) * 2
+    return {
+        "g2_causal_pass": g2_pass,
+        "mean_delta_Wwin_Cswap": mean_cswap,
+        "mean_delta_rand_control": mean_rand,
+        "g2_cswap_threshold": -1.0,
+        "gpt2_reference_Wwin_Cswap_delta": -4.94,
+        "scoring_position": "answer_pos (after greedy prefix following t*)",
+    }
+
+
+def load_verdict() -> dict:
+    path = OUT_DIR / "verdict.json"
+    if path.exists():
+        with open(path) as f:
+            return json.load(f)
+    return {}
+
+
+def run_causal_phase(
+    model,
+    items: list[Item] | None = None,
+    frac_start: float = 0.25,
+    frac_end: float = 0.75,
+) -> dict:
+    items = items or QWEN_ITEMS
+    n_layers = model.cfg.n_layers
+    layers = landing_layers(n_layers, frac_start, frac_end)
+    layer_label = f"L{layers[0]}-{layers[-1]}"
+
+    rows = []
+    for item in items:
+        print("causal:", item.name)
+        rows.extend(run_item_causal(model, item, layers, layer_label))
+
+    causal = pd.DataFrame(rows)
+    OUT_DIR.mkdir(exist_ok=True)
+    causal.to_csv(OUT_DIR / "causal.csv", index=False)
+    print(f"Wrote {OUT_DIR / 'causal.csv'}")
+
+    summary = summarize_causal(causal)
+    plot_causal(causal, layer_label)
+    g2 = evaluate_g2(causal, layer_label)
+
+    verdict = load_verdict()
+    verdict.update(g2)
+    verdict["phase"] = 3
+    verdict["causal_layer_band"] = layer_label
+    verdict["n_layers"] = n_layers
+    with open(OUT_DIR / "verdict.json", "w") as f:
+        json.dump(verdict, f, indent=2)
+
+    print(f"G2 causal gate: {'PASS' if g2['g2_causal_pass'] else 'FAIL'}")
+    print(f"Wrote {OUT_DIR / 'verdict.json'}")
+    return verdict
+
+
 def evaluate_behavior(model, item: Item, variant: str) -> dict:
     prompt = build_W_prompt(item) if variant == "W" else build_C_prompt(item)
     str_toks = model.to_str_tokens(prompt)
@@ -424,7 +657,7 @@ def plot_gpt2_vs_qwen(behavior: pd.DataFrame):
 
 def run_behavior_phase(model, include_forced_c: bool = True) -> dict:
     behavior = run_behavior(model, include_forced_c=include_forced_c)
-    summary = summarize_behavior(behavior)
+    summarize_behavior(behavior)
     plot_gpt2_vs_qwen(behavior)
     g1 = evaluate_g1(behavior)
     gpt2_ref = load_gpt2_behavior_reference()
@@ -434,11 +667,10 @@ def run_behavior_phase(model, include_forced_c: bool = True) -> dict:
         g1["mean_score_forced_C"] = float(c["score_W_minus_C"].mean())
         g1["frac_top1_impulse_forced_C"] = float(c["top1_matches_impulse"].mean())
 
-    verdict = {
-        **g1,
-        "gpt2_reference": gpt2_ref,
-        "phase": 2,
-    }
+    verdict = load_verdict()
+    verdict.update(g1)
+    verdict["gpt2_reference"] = gpt2_ref
+    verdict["phase"] = max(verdict.get("phase", 0), 2)
     with open(OUT_DIR / "verdict.json", "w") as f:
         json.dump(verdict, f, indent=2)
     print(f"G1 behavior gate: {'PASS' if g1['g1_behavior_pass'] else 'FAIL'}")
@@ -450,11 +682,23 @@ def main():
     parser = argparse.ArgumentParser(description="Qwen anchoring replication")
     parser.add_argument(
         "command",
-        choices=["token-audit", "smoke-test", "behavior", "all", "phase1", "phase2"],
+        choices=["token-audit", "smoke-test", "behavior", "causal", "all", "phase1", "phase2", "phase3"],
         help="Experiment subcommand",
     )
     parser.add_argument("--model", default=None, help="HuggingFace model id")
     parser.add_argument("--item", default=None, help="Item name for smoke-test")
+    parser.add_argument(
+        "--layer-frac-start",
+        type=float,
+        default=0.25,
+        help="Causal patch band start fraction of depth (default 0.25)",
+    )
+    parser.add_argument(
+        "--layer-frac-end",
+        type=float,
+        default=0.75,
+        help="Causal patch band end fraction of depth (default 0.75)",
+    )
     parser.add_argument(
         "--no-forced-c",
         action="store_true",
@@ -482,6 +726,13 @@ def main():
 
     if args.command in ("behavior", "all", "phase2"):
         run_behavior_phase(model, include_forced_c=not args.no_forced_c)
+
+    if args.command in ("causal", "phase3"):
+        run_causal_phase(
+            model,
+            frac_start=args.layer_frac_start,
+            frac_end=args.layer_frac_end,
+        )
 
 
 if __name__ == "__main__":

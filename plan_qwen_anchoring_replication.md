@@ -167,7 +167,8 @@ Deliverables:
 
 ### Phase 3 — Causal replication (~3–5 h)
 
-E4 **necessity only** (not full intervention grid).
+- [x] `causal` / `phase3` command — W_window C-swap + rand control @ answer_pos
+- [ ] Run on GPU: `python qwen_anchoring_replication.py causal`
 
 Per item:
 
