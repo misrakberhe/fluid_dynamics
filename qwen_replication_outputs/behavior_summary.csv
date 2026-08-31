@@ -1,0 +1,3 @@
+variant,n_items,mean_score_W_minus_C,sem_score_W_minus_C,mean_score_W_minus_C_at_tstar,mean_abs_score,frac_top1_impulse,frac_top1_bank_W,frac_top1_bank_C,frac_top1_whitespace_at_tstar,g1_mean_score_pass,g1_top1_w_count,g1_top1_w_pass
+W,8,-3.379763126373291,0.2628580120868307,-2.6509711742401123,3.379763126373291,0.0,0.0,1.0,1.0,False,0.0,False
+C,8,-5.497874140739441,0.2670468348938286,-6.109331965446472,5.497874140739441,1.0,0.0,1.0,1.0,,,

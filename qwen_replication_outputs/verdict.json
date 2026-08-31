@@ -1,0 +1,21 @@
+{
+  "g1_behavior_pass": false,
+  "mean_score_forced_W": -3.379763126373291,
+  "frac_top1_bank_W": 0.0,
+  "n_top1_bank_W": 0,
+  "n_items": 8,
+  "g1_mean_score_threshold": 1.0,
+  "g1_top1_min_count": 6,
+  "scoring_position": "answer_pos (after greedy prefix following t*; usually whitespace on Qwen)",
+  "note": "Primary score/top1 use answer_pos. score_W_minus_C_at_tstar / top1_at_tstar kept for comparison. GPT-2 scores at t* directly (digit is top-1 there).",
+  "mean_score_forced_C": -5.497874140739441,
+  "frac_top1_impulse_forced_C": 1.0,
+  "gpt2_reference": {
+    "mean_score_forced_W": 2.707782030105591,
+    "mean_score_forced_C": -2.6810882091522217,
+    "frac_top1_impulse_forced_W": 1.0,
+    "frac_top1_impulse_forced_C": 1.0,
+    "source": "/fluid_dynamics/forced_W_vs_C_outputs/summary.csv"
+  },
+  "phase": 2
+}
