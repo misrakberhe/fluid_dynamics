@@ -33,20 +33,6 @@ ls -la "$OUT"
 git config user.email "misraketshai@gmail.com"
 git config user.name "Misrak Berhe"
 
-# Ensure we have latest main (rebase local output commits on top if any)
-git fetch origin main
-if ! git rev-parse --verify origin/main >/dev/null 2>&1; then
-  echo "ERROR: could not fetch origin/main"
-  exit 1
-fi
-
-if ! git merge-base --is-ancestor origin/main HEAD 2>/dev/null; then
-  echo "Branch diverged from origin/main — run: bash pod_sync.sh"
-  exit 1
-fi
-
-git pull --rebase origin main
-
 git add "$OUT/"
 git status
 
@@ -56,6 +42,10 @@ if git diff --cached --quiet; then
 fi
 
 git commit -m "$MSG"
+
+# Rebase output commit on latest main after local commit
+git fetch origin main
+git pull --rebase origin main
 
 if [[ -n "${GITHUB_PAT:-}" ]]; then
   git push "https://misrakberhe:${GITHUB_PAT}@github.com/misrakberhe/fluid_dynamics.git" main
