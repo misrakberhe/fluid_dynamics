@@ -164,6 +164,7 @@ Pick **one primary track** (+ optional stretch):
 
 ## Files to attach or link in application
 
+- [`MATS_application_outline.md`](MATS_application_outline.md) — **fill-in doc structure** (section map + source files)
 - [`WRITEUP_forced_answer_anchoring.md`](WRITEUP_forced_answer_anchoring.md) — narrative draft
 - [`E0-E8_spine_narrative.md`](E0-E8_spine_narrative.md) — one-page summary
 - [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md) — Qwen external validity
