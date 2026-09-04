@@ -64,7 +64,9 @@ You don't need all four. **One** polished addition + tight framing is often enou
 
 **MATS line (paste-ready):**
 
-> Qwen3.5-4B does not behaviorally anchor forced wrong answers (revision succeeds), but mid-depth impulse-window C-swap still shifts answer-digit preference (Δ ≈ −2.1 vs ≈ 0 control) — causal localization without GPT-2-style sticking.
+> Qwen3.5-4B revises forced wrong answers to the correct digit (0/8 stick), but mid-depth impulse-window C-swap still shifts preference (Δ ≈ −2.1, 95% bootstrap CI [−2.43, −1.69]; rand control ≈ 0) — revision can mask rather than erase the causal lever.
+
+**Blog:** [`BLOG_rl_revision_masks_anchoring.md`](BLOG_rl_revision_masks_anchoring.md)
 
 ---
 
@@ -86,18 +88,23 @@ You don't need all four. **One** polished addition + tight framing is often enou
 
 ### Do
 
-- [ ] Title the work **forced answer anchoring** or **causal persistence of a context-supplied answer**
-- [ ] Center **E4 residual patching** in first 3 sentences of past work
+- [ ] Open with **Qwen dissociation** (revision succeeds; causal lever remains), then GPT-2 mechanism
+- [ ] Title the work **forced answer anchoring** / **revision can mask anchoring**
+- [ ] Center **E4 residual patching** as the GPT-2 causal core
+- [ ] Report Qwen Δ with **SEM / CI / per-item** (not a bare mean)
 - [ ] State **E8 scope** in one sentence: "bank-W persistence requires W in the prompt on this bank"
 - [ ] Frame E1/E7 as: revision **fails** because cue **doesn't recruit** correction, not "momentum resists"
-- [ ] Propose a **specific** MATS summer project (see below)
+- [ ] Propose a **specific** MATS summer project (Track A)
+- [ ] **Do not** expand E9–E11 before deadline
 
 ### Don't
 
 - [ ] Lead with "we studied momentum in transformers"
+- [ ] Bury Qwen as "Medium effort — done" under external validity
 - [ ] Claim self-generated wrong-answer commitment (E8 ruled out on this bank)
 - [ ] Oversell GPT-2 arithmetic as "reasoning"
 - [ ] Hide the pivot — **hypothesis → test → revise** is a strength for MATS
+- [ ] Scope-creep into incomplete E9–E11 / redesign banks
 
 ---
 
@@ -140,13 +147,14 @@ Pick **one primary track** (+ optional stretch):
 
 ---
 
-## Priority order (if time-limited)
+## Priority order (if time-limited) — updated 2026-09-03
 
-1. **Polished E4 + schematic figure** (do this first)
-2. **Application paragraph** using framing above
-3. **MATS summer proposal** (one track, 3 milestones)
-4. **Forced C** OR **public README** (whichever is faster for you)
-5. ~~**Second model**~~ — **done** (Qwen3.5-4B; see `qwen_anchoring_replication_session_summary.md`)
+1. ~~**Promote Qwen dissociation**~~ — **done** ([`BLOG_rl_revision_masks_anchoring.md`](BLOG_rl_revision_masks_anchoring.md); WRITEUP §9)
+2. ~~**Qwen stats (SEM / bootstrap CI / per-item)**~~ — **done** (CI [−2.43, −1.69]; all 8 Δ < 0)
+3. ~~**Polished E4 + schematic (± Qwen panel)**~~ — **done** ([`figures/flagship_ABC.png`](figures/flagship_ABC.png); `make_flagship_figure.py`)
+4. **Paste blog / past-work into MATS form** + Track A proposal
+5. **Do not** open E9–E11 or self-generated redesign before deadline
+6. Optional: enlarge Qwen bank to 15–20 items if hours remain
 
 ---
 

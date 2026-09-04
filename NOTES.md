@@ -93,5 +93,6 @@ Forced-error arithmetic on GPT-2 small: E0–E8 done. **One-pager:** [`E0-E8_spi
 
 **MATS application boosters:** [`MATS_application_boosters.md`](MATS_application_boosters.md)  
 **MATS application outline (fill-in template):** [`MATS_application_outline.md`](MATS_application_outline.md)  
-**Qwen replication:** [`plan_qwen_anchoring_replication.md`](plan_qwen_anchoring_replication.md) — **done**; results in [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md)
+**Qwen replication:** [`plan_qwen_anchoring_replication.md`](plan_qwen_anchoring_replication.md) — **done**; results in [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md)  
+**Blog post (deadline track):** [`BLOG_rl_revision_masks_anchoring.md`](BLOG_rl_revision_masks_anchoring.md) — Qwen dissociation as hook; GPT-2 mechanism; claims checklist. Do **not** expand E9–E11 before submit.
 

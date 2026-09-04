@@ -19,11 +19,13 @@
 
 **Framing rules** (from [`MATS_application_boosters.md`](MATS_application_boosters.md) § Framing checklist):
 
-- Lead with **forced answer anchoring**, not "momentum in transformers."
-- Center **E4 residual patching** in the first 3 sentences of past work.
+- **Preferred open:** Qwen dissociation in 1–2 sentences, then GPT-2 mechanism underneath ([`BLOG_rl_revision_masks_anchoring.md`](BLOG_rl_revision_masks_anchoring.md)).
+- Lead with **forced answer anchoring** / revision-masking, not "momentum in transformers."
+- Center **E4 residual patching** as the GPT-2 causal core (Δ ≈ ±5).
 - E1/E7: revision **fails** because the cue **doesn't recruit** correction — not "model resists."
 - E8 scope in one sentence: bank-W persistence **requires W in the prompt** on this bank.
 - Include the pivot: hypothesis → test → revise (momentum → anchoring → E8 scope → Qwen dissociation).
+- **Do not** expand E9–E11 before deadline.
 
 ---
 
@@ -31,13 +33,10 @@
 
 | Attachment | File | Status |
 |---|---|---|
-| Main causal figure | `E4_outputs/main_interventions.png` | [ ] attach |
-| Mechanism schematic | `WRITEUP_forced_answer_anchoring.md` §5 (redraw or export) | [ ] create |
-| Optional: readout vs causality | `E4b_outputs/readout_vs_causality_raw.png` | [ ] attach |
-| Optional: Qwen comparison | `qwen_replication_outputs/replication_causal_gpt2_vs_qwen.png` | [ ] attach |
+| **Flagship composite (A+B+C)** | `figures/flagship_ABC.png` / `.pdf` | [x] create — regenerate via `make_flagship_figure.py` |
+| Main causal figure (raw) | `E4_outputs/main_interventions.png` | [x] (superseded by flagship B) |
+| Optional: readout vs causality | `E4b_outputs/readout_vs_causality_raw.png` | [ ] attach if space |
 | Repo link | `E4_content_patching.py`, session summaries | [ ] link |
-
-**Highest ROI gap:** one polished composite figure (E4 bar + schematic). See [`MATS_application_boosters.md`](MATS_application_boosters.md) §1.
 
 ---
 
@@ -186,21 +185,21 @@
 
 `[WRITE]` ___
 
-### 8b. Qwen external validity — done
+### 8b. Qwen dissociation — **promoted** (not a table-row)
 
-**Source:** [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md)  
-**Data:** `qwen_replication_outputs/verdict.json`  
+**Source:** [`BLOG_rl_revision_masks_anchoring.md`](BLOG_rl_revision_masks_anchoring.md) §3 · [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md)  
+**Data:** `qwen_replication_outputs/verdict.json`, `causal.csv`  
 **Figures:** `behavior_gpt2_vs_qwen.png`, `replication_causal_gpt2_vs_qwen.png`
 
-- G1 behavior **fail**: forced-W revises to C (0% top-1 = W; mean −3.4)
-- G2 causal **pass**: C-swap Δ ≈ **−2.1** vs rand control ≈ **0** (GPT-2: −4.9)
-- **Behavior–causality dissociation**
+- G1 behavior **fail**: forced-W revises to C (0% top-1 = W; mean −3.38, SEM 0.26)
+- G2 causal **pass**: C-swap Δ **−2.10** (SEM 0.21; bootstrap 95% CI **[−2.43, −1.69]**; all 8 items negative) vs rand ≈ **0**
+- **Claim:** RL-trained revision can **mask rather than remove** an anchoring mechanism
 
 **Paste-ready:**
 
-> Qwen3.5-4B does not behaviorally anchor forced wrong answers (revision succeeds), but mid-depth impulse-window C-swap still shifts answer-digit preference (Δ ≈ −2.1 vs ≈ 0 control) — causal localization without GPT-2-style sticking.
+> Qwen3.5-4B revises forced wrong answers to the correct digit (0/8 stick), but mid-depth impulse-window C-swap still shifts preference (Δ ≈ −2.1, 95% bootstrap CI [−2.43, −1.69]; rand control ≈ 0) — revision can mask rather than erase the causal lever.
 
-`[WRITE]` ___
+`[WRITE]` Prefer opening past-work / blog with this, then GPT-2 E4.
 
 ---
 

@@ -54,12 +54,15 @@ Source: `qwen_replication_outputs/verdict.json`
 
 ### Causal: mid-depth C-swap still shifts preference
 
-| Intervention | mean Δ (W−C score) | GPT-2 ref |
-|---|---|---|
-| **W_window C-swap** (L8–23) | **−2.10** | −4.94 (L5–11) |
-| **Random-position control** | **−0.02** | (not run in ref) |
+| Intervention | mean Δ (W−C score) | SEM | bootstrap 95% CI | GPT-2 ref |
+|---|---|---|---|---|
+| **W_window C-swap** (L8–23) | **−2.10** | 0.21 | **[−2.43, −1.69]** | −4.94 (L5–11) |
+| **Random-position control** | **−0.02** | 0.04 | — | (not run in ref) |
 
-**Read:** Residual state at the answer locus remains a **localized causal lever** on Qwen — C-swap pushes preference toward C (more negative W−C score) while off-locus swap is null. Effect is **~43% of GPT-2 magnitude** but clearly above control.
+**Per-item C-swap Δ** (all negative): −2.76, −2.49, −2.32, −2.31, −2.29, −2.01, −1.76, −0.86.  
+Seven of eight items in [−2.76, −1.76]; one weaker item still negative — mean not outlier-driven.
+
+**Read:** Residual state at the answer locus remains a **localized causal lever** on Qwen — C-swap pushes preference toward C (more negative W−C score) while off-locus swap is null. Effect is **~43% of GPT-2 magnitude** but clearly above control (CI excludes 0).
 
 ### Behavior–causality dissociation
 

@@ -108,11 +108,12 @@ causal gen-locus swap Δ ≈ −10. **Generic slot binding** for self-generated 
 - “The model resists revision” — nothing competes; the cue doesn’t write toward C.
 - Generalization to self-generated wrong answers on this bank (model emits different tokens).
 
-**External validity (Qwen3.5-4B, post-spine):** On an 8-item single-digit bank, forced-W revision
-**succeeds** behaviorally (0% top-1 = W; mean score −3.4 @ answer_pos) unlike GPT-2 (+2.7, 100% W).
-Yet W_window C-swap at L8–23 still shifts preference (Δ ≈ −2.1; random-position control ≈ 0) — roughly
-half GPT-2's magnitude (−4.9). Mid-depth answer-locus state remains a causal lever even when greedy
-output already favors the correct answer; **behavior–causality dissociation**, not full replication.
+**External validity / headline extension (Qwen3.5-4B):** On an 8-item single-digit bank, forced-W revision
+**succeeds** behaviorally (0% top-1 = W; mean score −3.38 ± SEM 0.26 @ answer_pos) unlike GPT-2 (+2.7, 100% W).
+Yet W_window C-swap at L8–23 still shifts preference (Δ −2.10, SEM 0.21; bootstrap 95% CI [−2.43, −1.69];
+all 8 items negative; random-position control ≈ 0) — ~43% of GPT-2's magnitude (−4.9). Mid-depth
+answer-locus state remains a causal lever even when greedy output already favors C: **revision can
+mask rather than remove an anchoring mechanism.** Blog: [`BLOG_rl_revision_masks_anchoring.md`](BLOG_rl_revision_masks_anchoring.md).
 Details: [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md).
 
 ---

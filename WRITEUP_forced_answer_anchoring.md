@@ -1,37 +1,36 @@
-# Write-up Draft — Priority A: Forced Answer Anchoring in GPT-2 Small
+# Write-up Draft — Priority A: Forced Answer Anchoring (+ Qwen Dissociation)
 
-**Status:** draft for internal use / outline expansion  
-**Audience:** you, collaborators, eventual blog or short paper  
-**Evidence base:** E0–E8 (+ E4b) on GPT-2 small, 8-item forced-error arithmetic bank  
-**Date:** 2026-08-31
+**Status:** blog-post track preferred for MATS deadline  
+**Canonical prose:** [`BLOG_rl_revision_masks_anchoring.md`](BLOG_rl_revision_masks_anchoring.md) (~2k words)  
+**Evidence base:** E0–E8 (+ E4b) GPT-2 small; Qwen3.5-4B behavior + causal C-swap  
+**Date:** 2026-09-03 (Qwen promoted; stats + citations filled)
 
-Related: [`E0-E8_spine_narrative.md`](E0-E8_spine_narrative.md), [`REDESIGN_OPTIONS.md`](REDESIGN_OPTIONS.md)
+Related: [`E0-E8_spine_narrative.md`](E0-E8_spine_narrative.md), [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md)
+
+**Structural note:** Lead with the Qwen behavior–causality dissociation, then walk back to the GPT-2 mechanism. Do **not** expand E9–E11 or self-generated redesign before deadline.
 
 ---
 
 ## Working title options
 
-1. **How a typed-in wrong answer persists through a revision cue** (descriptive)
-2. **Answer-slot anchoring:** causal structure of context-bound arithmetic preferences in GPT-2
-3. **Not momentum: mechanistic persistence of a forced answer token in a transformer**
-
-Pick (1) for clarity; (2) for mech-interp framing; (3) if you want the E8 boundary upfront.
+1. **Behavioral revision can mask an anchoring mechanism** (Qwen-hook; preferred for blog)
+2. **How a typed-in wrong answer persists through a revision cue** (descriptive / GPT-2-first)
+3. **Answer-slot anchoring:** causal structure of context-bound arithmetic preferences (mech interp)
+4. **Not momentum: mechanistic persistence of a forced answer token in a transformer**
 
 ---
 
 ## Abstract (draft ~150 words)
 
 We study a minimal setting where a wrong arithmetic answer appears in context and a revision cue
-fails to change the model's next-token preference. On GPT-2 small, revision cues never flip greedy
-output to the correct answer (E1). Using direct logit attribution, tuned-lens readouts, and
-residual patching, we map a causal pipeline: late post-embedding writes around the forced-answer
-locus build mid-depth residual state that determines preference at a later probe position; attention
-routing from the probe to that locus contributes but is not the primary constraint. Operand
-corruption softens preference without clean recomputation; the revision span does not write toward
-the correct answer. A self-generated vs forced comparison shows bank-specific wrong-answer
-persistence requires the token in the prompt—not generic self-commitment on this task bank. We
-frame this as **forced answer anchoring**: a locatable, intervenable mechanism for carrying a
-context-supplied answer forward, distinct from revision success or model-generated error commitment.
+may or may not change the model's next-token preference. On GPT-2 small, revision cues never flip
+greedy output to the correct answer (E1). Using residual patching we show mid-depth state at the
+answer locus is necessary and sufficient for later preference (E4, Δ ≈ ±5). Scope is typed-in
+anchoring, not generic self-commitment (E8). On Qwen3.5-4B, revision **succeeds** behaviorally
+(0% top-1 = W) while the same class of mid-depth C-swap still shifts preference (Δ ≈ −2.1,
+bootstrap 95% CI [−2.43, −1.69]; rand control ≈ 0)—a **behavior–causality dissociation**. We
+frame GPT-2 results as **forced answer anchoring**, and the Qwen result as evidence that
+revision can **mask rather than remove** an anchoring lever.
 
 ---
 
@@ -216,112 +215,132 @@ the anchored token. Persistence of **this specific W** requires W in the input (
 
 ### Safe to claim
 
-- [ ] Typed-in wrong answer at the first answer slot causally influences preference at a later `=`.
-- [ ] Effect is localized to answer-locus residual (W_window), strongest mid-depth (L5–L8).
-- [ ] Late layers at t* are causally load-bearing despite earlier readable preference.
-- [ ] Routing to W_window contributes; content swap is the stronger intervention.
-- [ ] Revision cues do not flip greedy output; cue span does not systematically write toward C.
-- [ ] Bank-W persistence on this bank requires bank W in the prompt (E8).
+- [x] Typed-in wrong answer at the first answer slot causally influences preference at a later `=`.
+- [x] Effect is localized to answer-locus residual (W_window), strongest mid-depth (L5–L8).
+- [x] Late layers at t* are causally load-bearing despite earlier readable preference.
+- [x] Routing to W_window contributes; content swap is the stronger intervention.
+- [x] Revision cues do not flip greedy output on GPT-2; cue span does not systematically write toward C.
+- [x] Bank-W persistence on this bank requires bank W in the prompt (E8).
+- [x] Qwen3.5-4B: forced-W revision succeeds while mid-depth C-swap still shifts preference
+  (Δ ≈ −2.1, bootstrap 95% CI [−2.43, −1.69]; all 8 items negative; rand control ≈ 0).
+
+### Ruled out (on these banks)
+
+- [x] Generic “momentum resists the cue.”
+- [x] Wrong > correct asymmetry — forced W vs C near-symmetric (`forced_W_vs_C_*`).
+- [x] Self-generated bank-W commitment without typing (E8).
+- [x] Full behavioral replication of GPT-2 sticking on Qwen (G1 fail).
 
 ### Do not claim without new experiments
 
 - [ ] Generic commitment / momentum across tasks or models.
-- [ ] Whether self-generated impulses lack persistence — **ruled out** on aligned axis (`self_aligned_persistence_session_summary.md`).
-- [ ] Revision "resistance" — prefer "non-recruitment" or "anchoring."
-- [ ] Wrong > correct asymmetry — **ruled out** (forced W vs C near-symmetric; see `forced_W_vs_C_session_summary.md`).
-- [ ] Generality beyond 8 items / one cue family.
+- [ ] That post-training *always* leaves anchors intact — only that revision and causality **can** dissociate.
+- [ ] Generality beyond 8 items / one cue family (Qwen larger bank still desirable).
+- [ ] E9–E11 / self-generated redesign — **deferred; do not expand before MATS deadline.**
 
 ---
 
-## 8. Related work (positioning bullets)
+## 8. Related work (citations — scoped)
 
-Use these to frame **anchoring**, not failed momentum:
+Use these to frame **anchoring** and the **revision-masking** story; not a literature review.
 
-- **In-context learning / priming** — early context shapes later predictions; we add **causal**
-  localization and a failed-revision behavioral template.
-- **Sycophancy / user-answer bias** — models echo user-supplied answers; we give a **circuit-level**
-  account on a minimal task.
-- **Induction / copying heads** — literal token repetition; compare whether W_window effect is
-  copying-like vs integrated state (E4 swap suggests integrated residual, not mere embed).
-- **"Wait" / self-correction** on reasoning models — different regime (often larger models,
-  sometimes successful correction); we document a **failure mode** with mechanism.
-- **Logit lens / tuned lens** — E0 motivates meter choice; E4b motivates not trusting early readout.
-
-*Action item:* add 3–5 specific citations when targeting a venue.
-
----
-
-## 9. Limitations (honest paragraph)
-
-GPT-2 small on short arithmetic is a minimal testbed: greedy continuations from `{a}+{b}=` rarely
-match bank W/C; revision never succeeds; depth is only 12 layers. We use a fixed 8-item bank and
-one primary cue. Causal interventions identify necessity of W_window state but do not uniquely
-identify minimal sufficient heads. J-lens and formation-threshold extensions were deferred. Results
-characterize **forced** wrong-answer anchoring; E8 explicitly limits extension to self-generated
-errors on this bank.
+1. **Olsson et al. (2022).** *In-context Learning and Induction Heads.* arXiv:2209.11895.  
+   Pattern-completion / copy-like circuits — contrast with E4 integrated residual swap.
+2. **Elhage et al. (2021).** *A Mathematical Framework for Transformer Circuits.*  
+   https://transformer-circuits.pub/2021/framework/ — induction / composition background.
+3. **Belrose et al. (2023).** *Eliciting Latent Predictions from Transformers with the Tuned Lens.* arXiv:2303.08112.  
+   Meter choice; supports E4b “readable ≠ causal.”
+4. **nostalgebraist (2020).** *interpreting GPT: the logit lens.* LessWrong.  
+   Secondary meter; E0 motivates not relying on it alone.
+5. **Muennighoff et al. (2025).** *s1: Simple test-time scaling.* arXiv:2501.19393.  
+   “Wait” / budget forcing → behavioral revision; our Qwen result asks whether the commitment lever vanishes.
 
 ---
 
-## 10. Generalization agenda (within Priority A)
+## 9. Qwen3.5-4B — behavior–causality dissociation (promoted)
 
-Extensions that **strengthen** the anchoring paper without changing the core claim:
+**Status:** headline extension, not a table-row under “external validity.”  
+**Full prose:** blog §3 · **Session:** [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md)
 
-| Extension | Adds | Effort |
+### 9.1 Behavioral floor
+
+Forced-W: mean score **−3.38** (SEM 0.26) @ answer_pos; **0/8** top-1 = W (**100%** = C).  
+Forced-C: impulse still sticks (100% top-1 = C). Wrong-specific revision success.
+
+### 9.2 Causal swap
+
+W_window C-swap L8–23: mean Δ **−2.10** (SEM 0.21); bootstrap 95% CI **[−2.43, −1.69]** (10k resamples).  
+Per-item Δ (all negative): −2.76, −2.49, −2.32, −2.31, −2.29, −2.01, −1.76, −0.86.  
+Rand-pos control: **−0.02**. GPT-2 ref: −4.94.
+
+### 9.3 Dissociation
+
+Revision succeeds; mid-depth answer-locus state remains a causal lever (~43% of GPT-2 magnitude, >> control).  
+**Claim:** Successful behavioral revision can **mask rather than remove** an anchoring mechanism.
+
+---
+
+## 10. Limitations (honest paragraph)
+
+GPT-2 small on short arithmetic is a minimal testbed; both models use n=8 item banks; Qwen required
+`answer_pos` scoring for whitespace. Causal interventions identify necessity of W_window state but
+do not uniquely identify minimal heads. E9–E11 and larger Qwen banks are deferred. Results
+characterize **forced** answer anchoring on GPT-2 and a **scoped** dissociation on Qwen—not a
+universal claim about all post-trained models, or that RL specifically caused Qwen’s revision.
+
+---
+
+## 11. Generalization agenda (within Priority A) — do not expand E9–E11 now
+
+| Extension | Adds | Effort / status |
 |---|---|---|
-| Forced **C** spine | Wrong vs right asymmetry | Low — **done** (`forced_W_vs_C_*`) |
-| Self-aligned persistence | Gen scored on own axis | Low — **done** (`self_aligned_persistence_*`) |
-| More items / cues | Robustness | Low |
-| Second model (e.g. Qwen3.5-4B) | External validity | Medium — **done:** [`qwen_anchoring_replication_session_summary.md`](qwen_anchoring_replication_session_summary.md) |
-| User-message framing | "The answer is 25" vs bare `= 25` | Low |
-| E9 α-sweep on patch | Nonlinearity of anchor strength | Medium |
-| Compare ICL-planted wrong answer | vs user-typed W | Medium |
+| Forced **C** spine | Wrong vs right asymmetry | **Done** — symmetric |
+| Self-aligned persistence | Gen scored on own axis | **Done** |
+| Qwen3.5-4B dissociation | Behavior vs causality | **Done** — **promoted to §9 / blog hook** |
+| Larger Qwen bank (15–20) | Stats robustness | Moderate — optional polish |
+| User-message framing | Restore sticking? | Low — good MATS proposal item |
+| E9–E11 / self-gen redesign | Scope creep | **Do not touch before deadline** |
 
 ---
 
-## 11. Suggested document structure (full paper / long post)
+## 12. Document structure — **blog post** (chosen)
 
-1. **Introduction** — provisional answers in context; revision cue puzzle (§1 above)
-2. **Setup** — prompt, bank, metrics (§3)
-3. **Behavioral baseline** — E1 (+ soft metrics paragraph)
-4. **Where is the answer written?** — E2
-5. **What does t* read?** — E3
-6. **Causal necessity of answer-locus state** — E4 (+ per-layer figure)
-7. **Readout vs causality at t*** — E4b
-8. **Routing vs content** — E5
-9. **Modulation: operands and cue** — E6, E7
-10. **Scope: forced vs self-generated** — E8
-11. **Discussion** — anchoring frame, related work, limitations
-12. **Conclusion** — one sentence (below)
+See [`BLOG_rl_revision_masks_anchoring.md`](BLOG_rl_revision_masks_anchoring.md):
 
-**Conclusion sentence (draft):**  
-We show that when a wrong answer token is supplied in context, GPT-2 small builds mid-depth
-residual state at that answer locus that causally controls later preferences despite revision
-language; this is mechanistically rich answer-slot anchoring, not cue resistance or generic
-self-commitment on our task bank.
+1. Hook — Qwen dissociation (1–2 sentences)
+2. Setup
+3. GPT-2 mechanism (E1 → E4 flagship → E4b–E8 compressed)
+4. **Qwen §** — behavioral floor · causal swap · dissociation
+5. Related work (5 citations above)
+6. Claims checklist · limitations · one-sentence close
+
+**Conclusion sentence:**  
+When a wrong answer is typed into context, GPT-2 builds mid-depth residual state that causally
+controls later preference despite revision language; on Qwen3.5-4B the same class of intervention
+still moves preference even though the model already revises—suggesting behavioral revision can mask,
+rather than erase, an anchoring pathway.
 
 ---
 
-## 12. Figures to assemble from existing outputs
+## 13. Figures (flagship = E4 + schematic; Qwen optional panel)
 
-| Figure | Source |
-|---|---|
-| Behavioral: score + top-1 by condition | E1 curves, E6/E8 bar plots |
-| Write-wave heatmap | E2 notebook |
-| t* tuned-lens depth curve | E3 outputs |
-| E4 intervention bar chart | E4_outputs |
-| Readout vs causality overlay | E4b_outputs |
-| Path ablation vs content | E5_outputs |
-| E8 forced vs self-gen | E8_outputs |
+| Figure | Source | Role |
+|---|---|---|
+| **E4 intervention bars** | `E4_outputs/main_interventions.png` | Flagship |
+| Schematic | §5 above | Pair with E4 |
+| Qwen behavior / causal | `qwen_replication_outputs/*.png` | Dissociation panel |
+| Readout vs causality | `E4b_outputs/` | Optional |
 
 ---
 
-## 13. Next steps for *you* (writing workflow)
+## 14. Writing workflow (deadline)
 
-1. **Choose venue shape:** blog post (~2k words) vs workshop paper (~6–8 pp).
-2. **Draft §4** first — results are already frozen in session summaries.
-3. **One main figure:** schematic (§5) + E4 bar chart.
-4. **Abstract** — refine §Abstract after §4 draft.
-5. ~~Optional: run **forced C** (Option 5 in REDESIGN_OPTIONS) for one new paragraph on asymmetry.~~ **Done** — symmetric; paragraph draft in `forced_W_vs_C_session_summary.md`.
+1. ~~Choose venue~~ → **blog post** (~2k words) — done.
+2. ~~Promote Qwen~~ → §9 + blog §3 — done.
+3. ~~Stats on Qwen Δ~~ → SEM + bootstrap CI + per-item list — done.
+4. ~~Citations~~ → §8 (5 papers) — done.
+5. Polish composite figure (E4 + schematic ± Qwen panel).
+6. Paste blog / past-work excerpt into MATS form; keep E9–E11 out.
 
 ---
 
