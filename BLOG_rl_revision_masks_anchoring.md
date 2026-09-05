@@ -6,7 +6,12 @@ Misrak Berhe · draft for MATS / portfolio · 2026-09-03
 
 ---
 
-On Qwen3.5-4B, a revision cue after a typed-in wrong answer **flips greedy output to the correct digit**—yet swapping mid-depth (middle-layer) residual state at the token positions around that answer still moves preference by Δ ≈ −2.1 (bootstrap 95% CI [−2.43, −1.69]; random-position control ≈ 0). Behavioral revision succeeds; the same editable stored-answer pathway remains. That dissociation is the claim. What follows walks back to the GPT-2 mechanism underneath it, then returns to Qwen with the full subsection structure.
+**Claim:** On Qwen3.5-4B, the model can *say* the revised (correct) answer while still having an editable internal copy of the typed wrong answer.
+
+- **Behavior:** after “Wait, let me recompute,” greedy output is C on 8/8 items.
+- **Causal check:** overwriting residual activations in the **middle layers**, at the token positions around that typed answer, still shifts preference (Δ ≈ −2.1 vs ≈ 0 at random positions; bootstrap 95% CI [−2.43, −1.69]).
+
+So revision changed the output without removing that pathway. What follows walks back to the GPT-2 mechanism underneath it, then returns to Qwen with the full subsection structure.
 
 **Figure:** [`figures/flagship_ABC.png`](figures/flagship_ABC.png) (plain-language panels + key).  
 **Terms:** skim the [glossary](GLOSSARY.md) first if W / C-swap / mid-depth are unfamiliar.
